@@ -5,8 +5,15 @@ on:
     branches:
       - main
 
+# GitHub Pages 배포 권한 추가
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -14,6 +21,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -27,7 +37,18 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      # Direct Deployment (Actions를 통한 직접 배포)
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # 기존 gh-pages 브랜치 호환용 푸시도 병행 유지
+      - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
