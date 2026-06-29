@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-# GitHub Pages 배포 권한 추가
 permissions:
   contents: write
   pages: write
@@ -17,6 +16,9 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
