@@ -27,9 +27,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      # gh-pages 브랜치 배포
-      - name: Deploy to gh-pages branch
+      # index 브랜치 배포
+      - name: Deploy to index branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          publish_branch: index
+
